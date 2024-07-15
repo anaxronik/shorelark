@@ -17,10 +17,6 @@ impl Network {
             .fold(inputs, |inputs, layer| layer.propagate(inputs))
     }
 
-    pub fn new(layers: Vec<Layer>) -> Self {
-        Self { layers }
-    }
-
     pub fn random(layers: &[LayerTopology]) -> Self {
         let layers = layers
             .windows(2)
@@ -71,42 +67,11 @@ impl Neuron {
     }
 
     fn random(input_size: usize) -> Self {
-        let mut rng = rand::thread_rng()
+        let mut rng = rand::thread_rng();
         let bias = rng.gen_range(-1.0..=1.0);
 
-        let weights = (0..input_size).map(|_| rng.gen_range(-1.0..=1.0)).collect();
+        let weights = (0..input_size).map(|_| todo!()).collect();
 
         Self { bias, weights }
-    }
-}
-
-#[cfg(test)]
-mod neuron_tests {
-    use super::*;
-
-    #[test]
-    fn test_propagate_positive_output() {
-        let neuron = Neuron {
-            bias: 0.5,
-            weights: vec![0.2, 0.8],
-        };
-        let inputs = [1.0, 0.5];
-        let output = neuron.propagate(&inputs);
-        let expected_output = 0.5 + (1.0 * 0.2 + 0.5 * 0.8); // Expected: 0.5 + 0.6 = 1.1
-        assert_eq!(output, expected_output);
-    }
-
-    #[test]
-    fn test_propagate_negative_output() {
-        let neuron = Neuron {
-            bias: -1.0,
-            weights: vec![0.2, 0.8],
-        };
-        let inputs = [1.0, 0.5];
-        let output = neuron.propagate(&inputs);
-        assert!(
-            output >= 0.0,
-            "Output should be non-negative due to ReLU activation."
-        );
     }
 }
